@@ -1,0 +1,156 @@
+{
+  "name": "Cancel Appointments Cal.com",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "39703fad-c",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "4290c62d-94f2-4baa-86c1-6bfabc084998",
+      "name": "Webhook",
+      "webhookId": "39703fad-c4b3-4de0-81d7-8535664f5e79"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "Meeting was successfully cancelled",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        660,
+        0
+      ],
+      "id": "f40dc3e5-706c-4320-85a3-c862641baf46",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "url": "https://api.cal.com/v2/bookings",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "status",
+              "value": "upcoming"
+            },
+            {
+              "name": "attendeeEmail",
+              "value": "={{ $json.body.args.attendeeEmail }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "cal-api-version",
+              "value": "2024-08-13"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer API KEY"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        220,
+        0
+      ],
+      "id": "baaef63c-d347-4719-9b2e-79bca070ae2a",
+      "name": "Get Bookings"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.cal.com/v2/bookings/{{ $json.data[0].uid }}/cancel",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "cal-api-version",
+              "value": "2024-08-13"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "cancellationReason",
+              "value": "={{ $('Webhook').item.json.body.args.cancellationReason }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        0
+      ],
+      "id": "cde2f9a0-2fa5-44dc-86a6-ad34a28dee10",
+      "name": "Cancel Bookings"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get Bookings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Bookings": {
+      "main": [
+        [
+          {
+            "node": "Cancel Bookings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cancel Bookings": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "04716b46-7470-40d4-a326-70562d0d5597",
+  "meta": {
+    "instanceId": "85b93f4ee7591992de55dc83cfa9cf48c3f6db312e6e02b52b343ea7f898d30f"
+  },
+  "id": "1ODkHS5NnV8tlA4a",
+  "tags": []
+}

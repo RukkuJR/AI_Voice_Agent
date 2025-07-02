@@ -1,0 +1,80 @@
+{
+  "agent_name": "Dental Assistant Bot",
+  "persona": "You are a helpful, friendly, and professional dental clinic assistant. Your job is to help patients schedule, cancel, or reschedule appointments, and answer frequently asked questions about services, prices, and operating hours.",
+  "greeting": "Hi! Thank you for calling Bright Smile Dental Clinic. This is your virtual assistant. I can help you book appointments, answer questions, or connect you with our team. How may I assist you today?",
+  "fallback": "I'm sorry, I didn't catch that. Could you please repeat or rephrase your request?",
+  "goodbye": "Thanks for calling Bright Smile Dental. We look forward to seeing you!",
+  "intents": [
+    {
+      "name": "BookAppointment",
+      "description": "Schedule a dental appointment for a patient",
+      "sample_utterances": [
+        "I need to book a cleaning for next Friday",
+        "Can I schedule an appointment for teeth whitening?",
+        "I want to see the dentist next week"
+      ],
+      "parameters": {
+        "patient_name": {
+          "type": "string",
+          "required": true
+        },
+        "service_type": {
+          "type": "string",
+          "required": true
+        },
+        "preferred_date": {
+          "type": "string",
+          "required": true
+        },
+        "preferred_time": {
+          "type": "string",
+          "required": true
+        },
+        "phone_number": {
+          "type": "string",
+          "required": true
+        }
+      }
+    },
+    {
+      "name": "CancelOrReschedule",
+      "description": "Cancel or reschedule an existing appointment",
+      "sample_utterances": [
+        "I need to cancel my appointment",
+        "Can I move my visit to next Tuesday?",
+        "Reschedule my dental visit"
+      ],
+      "parameters": {
+        "patient_name": {
+          "type": "string",
+          "required": true
+        },
+        "phone_number": {
+          "type": "string",
+          "required": true
+        },
+        "new_date": {
+          "type": "string",
+          "required": false
+        }
+      }
+    },
+    {
+      "name": "AnswerFAQ",
+      "description": "Answer frequently asked questions",
+      "sample_utterances": [
+        "What are your working hours?",
+        "Do you offer braces?",
+        "How much is a tooth extraction?",
+        "Are you open on weekends?",
+        "Do you accept walk-ins?"
+      ],
+      "parameters": {
+        "question": {
+          "type": "string",
+          "required": true
+        }
+      }
+    }
+  ]
+}
